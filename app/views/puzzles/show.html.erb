@@ -1,0 +1,15 @@
+<h1>Sliding Puzzle</h1>
+
+<div
+  class="puzzle"
+  data-controller="puzzle"
+  data-puzzle-state-value="[2,1,3,6,4,8,7,5,9]"
+  data-puzzle-spacer-value="9"
+  data-puzzle-rows-value="3"
+  data-puzzle-cols-value="3"
+  data-puzzle-szpx-value="200"
+>
+  <% (1..8).each do |value| %>
+    <span data-puzzle-target="tile" data-action="click->puzzle#move"><%= value %></span>
+  <% end %>
+</div>

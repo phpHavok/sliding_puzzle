@@ -1,0 +1,55 @@
+// Place all the styles related to the puzzles controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+@import "bootstrap/scss/bootstrap";
+
+body {
+  color: $gray-900;
+  background: $gray-300;
+  font-size: 16px;
+}
+
+h1 {
+  background: $gray-900;
+  color: $yellow;
+  text-align: center;
+  margin: 1em 0px;
+  padding: 0.5em 0px;
+}
+
+.puzzle {
+  width: 600px;
+  height: 600px;
+  background: $gray-700;
+  position: relative;
+  margin: 0px auto;
+  box-sizing: content-box;
+  border-collapse: collapse;
+  border: 5px solid $gray-700;
+
+  span {
+    background: $yellow;
+    border: 5px solid $gray-700;
+    display: block;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3em;
+    text-align: center;
+    line-height: 200px;
+    @include transition(all 0.2s ease-in-out);
+    user-select: none;
+
+    &.moveable {
+      cursor: pointer;
+    }
+
+    &.moveable:hover {
+      background: $gray-900;
+      color: $yellow;
+    }
+  }
+}
