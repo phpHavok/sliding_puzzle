@@ -2,17 +2,26 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="puzzle"
 export default class extends Controller {
-  static targets = ["tile"];
+  static targets = ["tile", "console", "pid"];
   static values = {
     state: Array,
+    goal: Array,
     spacer: Number,
     rows: Number,
     cols: Number,
-    szpx: Number,
   };
 
   connect() {
     this.refresh();
+    this.moveCount = 0;
+    this.log("Welcome to the Sliding Puzzle!");
+  }
+
+  log(message) {
+    let p = document.createElement("p");
+    p.textContent = message;
+    this.consoleTarget.appendChild(p);
+    this.consoleTarget.scrollTop = this.consoleTarget.scrollHeight;
   }
 
   refresh() {
@@ -21,8 +30,8 @@ export default class extends Controller {
       let tilePosition = this.stateValue.indexOf(tileIdx + 1);
       let row = Math.floor(tilePosition / this.colsValue);
       let col = tilePosition % this.colsValue;
-      tile.style.top = row * this.szpxValue + "px";
-      tile.style.left = col * this.szpxValue + "px";
+      tile.style.top = row * ((1 / this.rowsValue) * 100) + "%";
+      tile.style.left = col * ((1 / this.colsValue) * 100) + "%";
       tile.classList.toggle("moveable", this.adjacent(tilePosition, spacerIdx));
     });
   }
@@ -33,6 +42,7 @@ export default class extends Controller {
     );
     let spacerIdx = this.stateValue.indexOf(this.spacerValue);
     if (this.adjacent(clickedIdx, spacerIdx)) {
+      this.log(`Move #${++this.moveCount}: ${event.target.textContent}`);
       this.swap(clickedIdx, spacerIdx);
     }
   }
@@ -55,5 +65,33 @@ export default class extends Controller {
     newState[idxA] = this.stateValue[idxB];
     newState[idxB] = this.stateValue[idxA];
     this.stateValue = newState;
+  }
+
+  load() {
+    let newState = new Array();
+    [...this.pidTarget.value].forEach((c) => {
+      newState.push(parseInt(c));
+    });
+    let sortedState = Array.from(newState).sort();
+    if (JSON.stringify(sortedState) != JSON.stringify(this.goalValue)) {
+      this.log("Tried to load invalid puzzle.");
+      return;
+    }
+    this.log(`Loaded puzzle: ${this.pidTarget.value}`);
+    this.stateValue = newState;
+    this.moveCount = 0;
+  }
+
+  random() {
+    // TODO
+    this.log("Loaded random puzzle.");
+  }
+
+  hint() {
+    this.log("Hint");
+  }
+
+  solve() {
+    this.log("Solve");
   }
 }
