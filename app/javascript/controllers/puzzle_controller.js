@@ -83,8 +83,43 @@ export default class extends Controller {
   }
 
   random() {
-    // TODO
+    let newState = Array.from(this.goalValue);
+    for (let i = 0; i < 1000; i++) {
+      let moves = this.possible_moves(newState);
+      let randomMove = Math.floor(Math.random() * moves.length);
+      newState[newState.indexOf(this.spacerValue)] =
+        newState[moves[randomMove]];
+      newState[moves[randomMove]] = this.spacerValue;
+    }
     this.log("Loaded random puzzle.");
+    this.moveCount = 0;
+    this.stateValue = newState;
+  }
+
+  possible_moves(arr) {
+    let spacerIdx = arr.indexOf(this.spacerValue);
+    let spacerRows = Math.floor(spacerIdx / this.colsValue);
+    let spacerCols = spacerIdx % this.colsValue;
+    return [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ]
+      .map((coords) => {
+        return [coords[0] + spacerRows, coords[1] + spacerCols];
+      })
+      .filter((coords) => {
+        return (
+          coords[0] >= 0 &&
+          coords[0] < this.rowsValue &&
+          coords[1] >= 0 &&
+          coords[1] < this.colsValue
+        );
+      })
+      .map((coords) => {
+        return coords[0] * this.rowsValue + coords[1];
+      });
   }
 
   hint() {
