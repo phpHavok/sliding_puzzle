@@ -123,10 +123,34 @@ export default class extends Controller {
   }
 
   hint() {
-    this.log("Hint");
+    this.log("Coming soon...");
+  }
+
+  diff(s1, s2) {
+    return s2[s1.indexOf(this.spacerValue)];
   }
 
   solve() {
-    this.log("Solve");
+    fetch(
+      `http://localhost:3000/api/v1/puzzles/solve?state=${JSON.stringify(
+        this.stateValue
+      )}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        this.log(`A* found a solution in ${json.moves.length - 1} steps.`);
+        let previous = json.moves[0].state;
+        json.moves.slice(1).forEach((move, index) => {
+          setTimeout(() => {
+            this.log(
+              `A* move #${index + 1}: ${this.diff(move.state, previous)}`
+            );
+            previous = move.state;
+            this.stateValue = move.state;
+          }, index * 250);
+        });
+      });
   }
 }
