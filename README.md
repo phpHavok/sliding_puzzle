@@ -1,24 +1,29 @@
-# README
+# Sliding Puzzle
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+![Screenshot](screenshot.png)
 
-Things you may want to cover:
+This is a Ruby on Rails implementation of the Sliding Puzzle game, particularly the 8-puzzle. The goal is to slide around tiles and reach the target state which looks like this:
 
-* Ruby version
+```
+1  2  3
+4  5  6
+7  8
+```
 
-* System dependencies
+To run the server, type:
 
-* Configuration
+```
+rails s
+```
 
-* Database creation
+The bulk of the backend implementation is located under `app/solver`, including a custom D-ary Heap implementation and the actual algorithm being the A\* algorithm.
 
-* Database initialization
+To create a "Puzzle ID," concatenate the puzzle using row-major order with 9 in place of the empty space. For example, this puzzle:
 
-* How to run the test suite
+```
+2  1  3
+6  4  8
+7  5
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+is represented by Puzzle ID `213648759`.
